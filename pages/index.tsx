@@ -10,9 +10,9 @@ const isUnique = (s: string) => {
 
 const Words = (props: {words: string[]}) => {
   return (
-    <ul>
+    <ul className="flex flex-wrap">
       {props.words.map(word => (
-        <li key={word}>{word}</li>
+        <li className="p-2 bg-blue-200 bg-opacity-50 rounded-md m-1" key={word}>{word}</li>
       ))}
     </ul>
   )
@@ -61,8 +61,10 @@ const Home = () => {
     }
   }, [debouncedInput]);
   return (
-    <div>
+    <div className="p-2">
       <input
+        autoFocus
+        className='p-2 my-1 w-full border-2 border-blue-200 rounded-md'
         value={input}
         onChange={event => setInput(event.target.value)}
         placeholder="Enter today's 7 letters. The first letter should be the required letter"
