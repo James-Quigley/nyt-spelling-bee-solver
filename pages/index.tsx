@@ -112,21 +112,25 @@ const Home = () => {
       fetch("/api/words", {
         method: "POST",
         body: JSON.stringify({
-          letters: Array.from(debouncedInput),
+          letters: Array.from(debouncedInput.toLocaleLowerCase()),
         }),
         headers: {
           "Content-Type": "application/json",
         },
       })
-        .then((response) => {
-          setLoading(false);
-          setError(null);
-          return response.json();
-        })
-        .then((json) => {
+        .then(async (response) => {
+          console.log("HERE", response);
+          const json = await response.json();
+          if (response.status > 299) {
+            throw json.message;
+          } else {
+            setLoading(false);
+            setError(null);
+          }
           setWords(json.words);
         })
         .catch((error) => {
+          console.log("ERROR", error);
           setLoading(false);
           setError(error);
         });

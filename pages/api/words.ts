@@ -29,7 +29,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     !letters.every((letter) => /[a-z]/.test(letter))
   ) {
     return res.status(400).json({
-      error:
+      message:
         "The letters must be 7 characters long and contain only lowercase letters",
     });
   }
