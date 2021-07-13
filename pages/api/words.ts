@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { serialize } from "cookie";
 
 import wordsJson from "../../words.json";
+import { createJWT } from "../../util/jwt";
+import Word from "../../models/Word";
 
 const words = wordsJson as string[];
 
@@ -17,7 +20,7 @@ const getWords = (letters: string[]): string[] => {
   );
 };
 
-const handler = (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const letters: string[] = req.body?.letters ?? [];
 
   // check that there are 7 alphabetic characters in letters
@@ -31,8 +34,30 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
+  res.setHeader("Set-Cookie", serialize("user", createJWT(letters)));
+
+  const words = getWords(letters);
+
+  const votes = await Word.find({
+    word: {
+      $in: words,
+    },
+  }).exec();
+
+  const votesPerWord = Object.fromEntries(votes.map((v) => [v.word, v.votes]));
+
+  words.forEach((word) => {
+    if (!votesPerWord[word]) {
+      votesPerWord[word] = 0;
+    }
+  });
+
+  const sorted = Object.entries(votesPerWord)
+    .sort((a, b) => b[1] - a[1])
+    .map((v) => v[0]);
+
   return res.status(200).json({
-    words: getWords(letters),
+    words: sorted,
   });
 };
 
