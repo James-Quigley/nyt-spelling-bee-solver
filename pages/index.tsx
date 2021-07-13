@@ -119,7 +119,6 @@ const Home = () => {
         },
       })
         .then(async (response) => {
-          console.log("HERE", response);
           const json = await response.json();
           if (response.status > 299) {
             throw json.message;
@@ -130,7 +129,6 @@ const Home = () => {
           setWords(json.words);
         })
         .catch((error) => {
-          console.log("ERROR", error);
           setLoading(false);
           setError(error);
         });
