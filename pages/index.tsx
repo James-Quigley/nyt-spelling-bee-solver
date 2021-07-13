@@ -40,7 +40,7 @@ const Word = (props: { word: string }) => {
               },
             });
           }}
-          className="px-2 py-1 text-sm text-black bg-red-400 rounded-full"
+          className="pr-1 text-2xl text-red-400"
         >
           -
         </div>
@@ -72,7 +72,7 @@ const Word = (props: { word: string }) => {
               },
             });
           }}
-          className="px-2 py-1 text-sm text-black bg-green-300 rounded-full"
+          className="pl-1 text-2xl text-green-400"
         >
           +
         </div>
